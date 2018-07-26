@@ -1,0 +1,151 @@
+---
+title: "Tourism in Norway"
+author: "Marius R. Larsson"
+date: "26 juli 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(httr)
+# henter rjstat bibliotek for behandling av JSON-stat
+library(rjstat)
+#sourcing the data_get.R file where we have the JSON query, url, and the rainbowPlot function.
+#using "../" first allows us to move up one directory as the .Rmd files working directory is currently
+#the RMarkdown folder.
+source("../R/data_get.R") #Use this when knitting
+#source("R/data_get.R") #use this when working on the .Rmd document
+
+monthCol <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+```
+
+
+```{r prepare main data}
+#get the data from ssb 
+d.tmp <- POST(url, body=fullQuery, encode="json", verbose())
+sbtabell <- fromJSONstat(content(d.tmp, "text"))
+#extract the data from the list above
+ds <- sbtabell[[1]]
+
+colnames(ds)[c(2,4)] <- c("purpose", "month")
+#remove irrelevant data/coulm
+ds <- ds[,-c(3)]
+
+
+temper <- spread(ds, region, value)
+
+temper$Trondelag <- ifelse(temper[,c("Trøndelag")] == 0, 
+                                 rowSums(temper[,c("Sør-Trøndelag (-2017)","Nord-Trøndelag (-2017)", "Trøndelag")]),
+                                 temper[,c("Trøndelag")])#rowSums(temper[,c("Sør-Trøndelag (-2017)","Nord-Trøndelag (-2017)", "Trøndelag")])
+temper <- (temper[,-which(colnames(temper) %in% c("Sør-Trøndelag (-2017)","Nord-Trøndelag (-2017)", "Trøndelag"))])
+temper$Norge <- rowSums(temper[,3:ncol(temper)])
+
+#We know the first month:
+firstMonth <- as.Date("1986-01-01")
+#final month is new each month, so we must extract that from the data:
+finalMonth <- as.Date(paste0(gsub("[a-zA-Z]", "-", temper$month[nrow(temper)]), "-01"))
+
+#replacing the SSB month column with a proper date format for R
+temper$month <- seq(firstMonth, finalMonth, by="month")
+
+
+
+```
+
+# Introduction
+
+In this report we will look at the change in overnight stays at hotels in Norway from `r format(firstMonth, "%B %Y")` to `r format(finalMonth, "%B %Y")`.
+
+# Overnight Stays Norway
+
+The first plot shows a time series of the hotel overnight stays in Norway from January 1986 to May 2018. As we can se the activity is highly seasonal and seems to have a positive trend. We can observe that we have a small decrease in overnight stays following the 2008 financial crisis. On the other hand, it's difficult to see whether or not the YTD 2018 is higher than YTD 2017. Let's change the way we plot the data.
+
+```{r extract data and regular ts plot, fig.height=6, fig.width=16}
+#Let's just look at total overnight stays:
+totalOvernightStays <- temper %>% 
+  filter(purpose=="Overnattinger i alt")
+
+plot(ts(totalOvernightStays$Norge, freq=12, start=c(1986, 1)), ylab="overnight stays")
+```
+
+In the figure bellow we can se that for YTD, `r format(finalMonth, "%Y")` is currently the year with the most total overnight stays since `r format(firstMonth, "%Y")`.
+
+```{r total overnight stays plot, fig.height=6, fig.width=16}
+
+
+rainPlot(totalOvernightStays, "month", "Norge", 
+         main=paste0("Total Overnight Stays Hotels Norway \n", 
+                     format(firstMonth, "%B %Y"), "-", 
+                     format(finalMonth, "%B %Y")), 
+         ylab="", xlab="Month", xaxt="n", yaxt="n", alpha=0.4, font.main=1,
+         panel.first=grid())
+
+axis(1, at=1:12, labels = monthCol, cex.axis=0.75)
+axis(2, at=axTicks(2), labels=format(axTicks(2), big.mark = " "), las=1, cex.axis=0.75)
+
+```
+
+As we can se from the plot bellow, it's the Ferie, fritid that accounts for most of the overnight stays during peak season in summer. 
+
+```{r overnight stays by purpose plot, fig.height=8, fig.width=16}
+#Let's just look at total overnight stays:
+purposeOvernightStays <- temper %>% 
+  filter(purpose!="Overnattinger i alt")
+
+par(mfrow=c(1,3))
+for(i in 1:length(unique(purposeOvernightStays$purpose))){
+  
+  purposeDF <- subset(purposeOvernightStays, purpose==unique(purposeOvernightStays$purpose)[i])
+  
+  rainPlot(purposeDF, "month", "Norge", 
+           main=paste0(unique(purposeOvernightStays$purpose)[i], " Overnight Stays Norway \n", 
+                       format(firstMonth, "%B %Y"), "-", 
+                       format(finalMonth, "%B %Y")), 
+           ylab="", xlab="Month", xaxt="n", yaxt="n", alpha=0.4, font.main=1,
+           panel.first=grid())
+  
+  axis(1, at=1:12, labels = monthCol, cex.axis=0.75)
+  axis(2, at=axTicks(2), labels=format(axTicks(2), big.mark = " "), las=1, cex.axis=0.75)
+
+}
+```
+
+From the summary table bellow we can confirm that the month with the most overnight stays is highest for the Ferie, fritid category. The Kurs, konferanse category has the lowest. We can also see that the category Yrke has probably the least volatily as the range is quite low compared to the others. Both the plot and summary confirms this.
+
+```{r summary table for 2017-2018}
+tablePurpose <- temper %>% 
+  select(purpose, month, Norge) %>% 
+  filter(purpose!="Overnattinger i alt") %>% 
+  filter(month >= "2017-01-01") %>% 
+  spread(purpose, value=Norge) %>% 
+  mutate(month=format(month,"%b %Y"))
+
+knitr::kable(summary(tablePurpose[,2:ncol(tablePurpose)]), caption="Summary Table 2017-2018")
+```
+
+Under we can observe the final 17 observations. 
+
+```{r data table for 2017-2018}
+knitr::kable(format(tablePurpose, big.mark=" "), caption="Observation 2017-2018")
+```
+
+Finally, let's look at all the counties in Norway
+
+```{r total overnight stays all counties Norway, fig.height=14, fig.width=16}
+counties <- colnames(totalOvernightStays)[3:21]
+
+par(mfrow=c(4,5), mai=c(0.3, 0.5, 0.3, 0.4))
+
+for(i in 1:length(counties)){
+  rainPlot(totalOvernightStays, "month", counties[i], 
+           main=paste0(counties[i]), 
+           ylab="", xlab="", xaxt="n", yaxt="n", alpha=0.4, font.main=1,
+           panel.first=grid(), cex.main=2)
+
+  axis(1, at=1:12, labels = monthCol, cex.axis=1)
+  axis(2, at=axTicks(2), labels=format(axTicks(2), big.mark = " "), las=1, cex.axis=1)
+}
+```
+
