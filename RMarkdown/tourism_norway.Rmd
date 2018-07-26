@@ -2,7 +2,10 @@
 title: "Tourism in Norway"
 author: "Marius R. Larsson"
 date: "26 juli 2018"
-output: html_document
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
