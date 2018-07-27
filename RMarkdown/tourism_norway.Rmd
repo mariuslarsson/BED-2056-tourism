@@ -148,7 +148,11 @@ for(i in 1:length(counties)){
            panel.first=grid(), cex.main=2)
 
   axis(1, at=1:12, labels = monthCol, cex.axis=1)
+<<<<<<< HEAD
   axis(2, at=axTicks(2), labels=format(axTicks(2), big.mark = " "), las=1, cex.axis=2)
+=======
+  axis(2, at=axTicks(2), labels=format(axTicks(2), big.mark = " "), las=1, cex.axis=1)
+>>>>>>> 551eb8dad6f2a1c6e8b02bdafbdf68cbe0befcfd
 
 
 }
