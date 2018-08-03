@@ -15,8 +15,8 @@ library(rjstat)
 #sourcing the data_get.R file where we have the JSON query, url, and the rainbowPlot function.
 #using "../" first allows us to move up one directory as the .Rmd files working directory is currently
 #the RMarkdown folder.
-source("../R/data_get.R") #Use this when knitting
-source("../R/functions.R") #Use this when knitting
+source("R/data_get.R") #Use this when knitting
+source("R/functions.R") #Use this when knitting
 #source("R/data_get.R") #use this when working on the .Rmd document
 
 monthCol <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
