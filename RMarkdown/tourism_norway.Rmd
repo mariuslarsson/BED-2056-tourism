@@ -3,7 +3,7 @@ title: "Tourism in Norway"
 author: "Marius R. Larsson"
 date: "26 juli 2018"
 output:
-  github_document
+  html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -152,7 +152,4 @@ for(i in 1:length(counties)){
 }
 ```
 
-```{r}
-1+1
-```
 
