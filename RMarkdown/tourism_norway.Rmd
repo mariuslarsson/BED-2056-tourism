@@ -171,3 +171,8 @@ plot(rnorm(10), col="red", pch=20)
 plot(rnorm(100), type='l', lwd=2, col="red")
 ```
 
+```{r}
+#combination test branch/master
+1336+1
+```
+
