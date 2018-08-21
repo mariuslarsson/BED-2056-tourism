@@ -165,3 +165,9 @@ plot(0,0)
 plot(rnorm(10), col="red", pch=20)
 ```
 
+```{r}
+#The final branch test
+
+plot(rnorm(100), type='l', lwd=2, col="red")
+```
+
