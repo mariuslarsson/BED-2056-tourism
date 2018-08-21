@@ -156,7 +156,7 @@ for(i in 1:length(counties)){
 ```{r}
 #on the developer branch
 
-plot(0,0)
+plot(rnorm(111), pch=135, col="pink")
 ```
 
 ```{r}
