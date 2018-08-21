@@ -159,3 +159,9 @@ for(i in 1:length(counties)){
 plot(0,0)
 ```
 
+```{r}
+#keep adding to branch
+#
+plot(rnorm(10), col="red", pch=20)
+```
+
