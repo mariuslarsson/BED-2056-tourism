@@ -10,14 +10,13 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(httr)
-# henter rjstat bibliotek for behandling av JSON-stat
+# library for working with JSON-stat
 library(rjstat)
 #sourcing the data_get.R file where we have the JSON query, url, and the rainbowPlot function.
-#using "../" first allows us to move up one directory as the .Rmd files working directory is currently
-#the RMarkdown folder.
-source("../R/data_get.R") #Use this when knitting
-source("../R/functions.R") #Use this when knitting
-#source("R/data_get.R") #use this when working on the .Rmd document
+
+source("R/data_get.R")
+source("R/functions.R") 
+
 
 monthCol <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
@@ -25,6 +24,13 @@ monthCol <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 
 
 ```{r prepare main data}
+
+#Importing a static dataset as an example. This data was first generated
+#using the SSB API as seen under. It was then saved  as a .csv file
+#using write.csv(temper, file="temper.csv").
+temperStatic <- read.csv("data/temper.csv")
+
+
 #get the data from ssb 
 d.tmp <- POST(url, body=fullQuery, encode="json", verbose())
 sbtabell <- fromJSONstat(content(d.tmp, "text"))
@@ -52,7 +58,13 @@ finalMonth <- as.Date(paste0(gsub("[a-zA-Z]", "-", temper$month[nrow(temper)]), 
 #replacing the SSB month column with a proper date format for R
 temper$month <- seq(firstMonth, finalMonth, by="month")
 
-
+#Commands to generate lecture data
+#not run
+#don't run
+#norge <- temper %>% 
+#  filter(purpose=="Overnattinger i alt") %>% 
+#  filter(month>="2010-01-01") %>% 
+#  select(purpose, month, Norge)
 
 ```
 
@@ -62,20 +74,22 @@ In this report we will look at the change in overnight stays at hotels in Norway
 
 # Overnight Stays Norway
 
-The first plot shows a time series of the hotel overnight stays in Norway from January 1986 to May 2018. As we can se the activity is highly seasonal and seems to have a positive trend. We can observe that we have a small decrease in overnight stays following the 2008 financial crisis. On the other hand, it's difficult to see whether or not the YTD 2018 is higher than YTD 2017. Let's change the way we plot the data.
+The first plot shows a time series of the hotel overnight stays in Norway from January 1986 to May 2018. As we can se the activity is highly seasonal and seems to have a positive trend. We can observe that we have a small decrease in overnight stays following the 2008 financial crisis. On the other hand, it's difficult to see whether or not the YTD 2018 is higher than YTD 2017. In addition, the plot is created with a static data frame. This is perfectly fine, but if we are to update this report every month (or every time new data is available), we should use the SSB API. Let's change the way we plot the data and use the SSB API.
 
 ```{r extract data and regular ts plot, fig.height=6, fig.width=16}
-#Let's just look at total overnight stays:
-totalOvernightStays <- temper %>% 
+#Let's just look at total overnight stays.
+#This frame is created with the static data. 
+totalOvernightStays <- temperStatic %>% 
   filter(purpose=="Overnattinger i alt")
 
 plot(ts(totalOvernightStays$Norge, freq=12, start=c(1986, 1)), ylab="overnight stays")
 ```
 
-In the figure bellow we can se that for YTD, `r format(finalMonth, "%Y")` is currently the year with the most total overnight stays since `r format(firstMonth, "%Y")`.
+In the figure bellow we can se that for YTD, `r format(finalMonth, "%Y")` is currently the year with the most total overnight stays since `r format(firstMonth, "%Y")`. This plot is created with a dynamic dataset which will automatically be updated every month when SSB updates their data. This is also true for the rest of this example report.
 
 ```{r total overnight stays plot, fig.height=6, fig.width=16}
-
+totalOvernightStays <- temper %>% 
+  filter(purpose=="Overnattinger i alt")
 
 rainPlot(totalOvernightStays, "month", "Norge", 
          main=paste0("Total Overnight Stays Hotels Norway \n", 
@@ -152,16 +166,4 @@ for(i in 1:length(counties)){
 }
 ```
 
-
-```{r}
-#Working on da branch
-
-plot(rnorm(100), main="Branch plot")
-```
-
-```{r}
-#second branch commit
-
-plot(0,0, main="Second Branch Commit")
-```
 
