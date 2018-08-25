@@ -44,14 +44,14 @@ Kurs, konferanse category has the lowest. We can also see that the
 category Yrke has probably the least volatily as the range is quite low
 compared to the others. Both the plot and summary confirms this.
 
-|  | Ferie, fritid   | Kurs, konferanse |      Yrke      |
-|  | :-------------- | :--------------- | :------------: |
-|  | Min. : 528721   | Min. : 92458     |  Min. :522741  |
-|  | 1st Qu.: 672502 | 1st Qu.:225761   | 1st Qu.:618660 |
-|  | Median : 766716 | Median :238510   | Median :708997 |
-|  | Mean : 957046   | Mean :238344     |  Mean :703677  |
-|  | 3rd Qu.: 954289 | 3rd Qu.:266934   | 3rd Qu.:761421 |
-|  | Max. :2284651   | Max. :339637     |  Max. :871224  |
+| Ferie, fritid   | Kurs, konferanse |      Yrke      |
+| :-------------- | :--------------- | :------------: |
+| Min. : 528721   | Min. : 92458     |  Min. :522741  |
+| 1st Qu.: 672502 | 1st Qu.:225761   | 1st Qu.:618660 |
+| Median : 766716 | Median :238510   | Median :708997 |
+| Mean : 957046   | Mean :238344     |  Mean :703677  |
+| 3rd Qu.: 954289 | 3rd Qu.:266934   | 3rd Qu.:761421 |
+| Max. :2284651   | Max. :339637     |  Max. :871224  |
 
 Summary Table 2017-2018
 

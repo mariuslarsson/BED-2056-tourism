@@ -130,7 +130,8 @@ tablePurpose <- temper %>%
   spread(purpose, value=Norge) %>% 
   mutate(month=format(month,"%b %Y"))
 
-knitr::kable(summary(tablePurpose[,2:ncol(tablePurpose)]), caption="Summary Table 2017-2018")
+knitr::kable(summary(tablePurpose[,2:ncol(tablePurpose)]), caption="Summary Table 2017-2018",
+             row.names=F)
 ```
 
 Under we can observe the final 17 observations. 
