@@ -5,8 +5,12 @@ Marius R. Larsson
 
 # Introduction
 
-In this report we will look at the change in overnight stays at hotels
-in Norway from januar 1986 to juni 2018.
+This is an example file and project for the course BED-2056. Use this as
+an inspiration for your own project. Feel free to steal ideas and use
+the code (but for your own sake, don’t copy/paste. Understand what it’s
+doing and why it was used.). In this example report we will look at the
+change in overnight stays at hotels in Norway from januar 1986 to juni
+2018.
 
 # Overnight Stays Norway
 

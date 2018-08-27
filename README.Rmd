@@ -62,7 +62,7 @@ temper$month <- seq(firstMonth, finalMonth, by="month")
 
 # Introduction
 
-In this report we will look at the change in overnight stays at hotels in Norway from `r format(firstMonth, "%B %Y")` to `r format(finalMonth, "%B %Y")`.
+This is an example file and project for the course BED-2056. Use this as an inspiration for your own project. Feel free to steal ideas and use the code (but for your own sake, don't copy/paste. Understand what it's doing and why it was used.). In this example report we will look at the change in overnight stays at hotels in Norway from `r format(firstMonth, "%B %Y")` to `r format(finalMonth, "%B %Y")`.
 
 # Overnight Stays Norway
 
