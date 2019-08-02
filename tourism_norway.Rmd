@@ -3,8 +3,8 @@ title: "Tourism in Norway"
 author: "Marius R. Larsson"
 date: "26 juli 2018"
 output:
-  word_document: default
   pdf_document: default
+  word_document: default
   html_document: default
 ---
 
@@ -12,6 +12,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(httr)
+library(colorRamps)
 # library for working with JSON-stat
 library(rjstat)
 #sourcing the data_get.R file where we have the JSON query, url, and the rainbowPlot function.
