@@ -10,6 +10,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(httr)
+library(colorRamps)
 # library for working with JSON-stat
 library(rjstat)
 #sourcing the data_get.R file where we have the JSON query, url, and the rainbowPlot function.
@@ -24,6 +25,7 @@ monthCol <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oc
 
 
 ```{r prepare main data}
+
 #Importing a static dataset as an example. This data was first generated
 #using the SSB API as seen under. It was then saved  as a .csv file
 #using write.csv(temper, file="temper.csv").
@@ -57,12 +59,21 @@ finalMonth <- as.Date(paste0(gsub("[a-zA-Z]", "-", temper$month[nrow(temper)]), 
 #replacing the SSB month column with a proper date format for R
 temper$month <- seq(firstMonth, finalMonth, by="month")
 
+#Commands to generate lecture data
+#not run
+#don't run
+#norge <- temper %>% 
+#  filter(purpose=="Overnattinger i alt") %>% 
+#  filter(month>="2010-01-01") %>% 
+#  select(purpose, month, Norge)
 
 ```
 
 # Introduction
 
-This is an example file and project for the course BED-2056. Use this as an inspiration for your own project. Feel free to steal ideas and use the code (but for your own sake, don't copy/paste. Understand what it's doing and why it was used.). In this example report we will look at the change in overnight stays at hotels in Norway from `r format(firstMonth, "%B %Y")` to `r format(finalMonth, "%B %Y")`.
+This is an example file and project for the course BED-2056. Use this as an inspiration for your own project. Feel free to steal ideas and use the code (but for your own sake, don't copy/paste. Understand what it's doing and why it was used.). In this example report we will in a very superficial way look at the change in overnight stays at hotels in Norway from `r format(firstMonth, "%B %Y")` to `r format(finalMonth, "%B %Y")`.
+
+**It is expected that your final project is much more thorough, detailed and complete. This repository is just to illustrate how one can create a reproducible README-file, how to use the API from SSB, and to give some inspiration**
 
 # Overnight Stays Norway
 
